@@ -32,13 +32,8 @@ void ofApp::draw(){
     ofEnableDepthTest();
     ofPushMatrix();
 
-    for(int i=0;i<boxSizes.size();i++){
-        
-        ofPoint p = *boxPositions.at(i);
-        ofSetColor(boxColors.at(i));
-        ofFill();
-        ofDrawBox(p,boxSizes.at(i) * (sin((float)i + ofGetElapsedTimef())*0.25f + 1.0f));
-    }
+    drawBoxes();
+    
     ofPopMatrix();
     ofDisableDepthTest();
   
@@ -46,28 +41,17 @@ void ofApp::draw(){
     cam.end();
     
     if(isMouseDown){
-        ofFill();
-        ofSetColor(255);
-        ofDrawEllipse(mouseDownPosition.x,mouseDownPosition.y,10,10);
-        ofDrawEllipse(ofGetMouseX(),ofGetMouseY(),5,5);
-        ofDrawLine(mouseDownPosition.x,mouseDownPosition.y,ofGetMouseX(),ofGetMouseY());
+        drawMouseUI();
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-   // acc = 1.0f;
-    ofLog() << key;
     switch(key){
             case 'w':
             case 'W':
         case 357: // UP
             acc.z = -keyAcc;
-            break;
-        case 'd':
-        case 'D':
-        case 358: // RIGHT
-            acc.x = keyAcc;
             break;
         case 's':
         case 'S':
@@ -79,23 +63,20 @@ void ofApp::keyPressed(int key){
         case 356: // LEFT
             acc.x = -keyAcc;
             break;
+        case 'd':
+        case 'D':
+        case 358: // RIGHT
+            acc.x = keyAcc;
+            break;
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-    ofLog() << key;
     switch(key){
         case 'w':
         case 'W':
         case 357: // UP
-            acc.z = 0;
-            break;
-        case 'd':
-        case 'D':
-        case 358: // RIGHT
-            acc.x = 0;
-            break;
         case 's':
         case 'S':
         case 359: // DOWN
@@ -104,19 +85,13 @@ void ofApp::keyReleased(int key){
         case 'a':
         case 'A':
         case 356: // LEFT
+        case 'd':
+        case 'D':
+        case 358: // RIGHT
             acc.x = 0;
             break;
+
     }
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-
 }
 
 //--------------------------------------------------------------
@@ -130,30 +105,17 @@ void ofApp::mouseReleased(int x, int y, int button){
     isMouseDown = false;
 }
 
-//--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
+void ofApp::drawBoxes(){
+    for(int i=0;i<boxSizes.size();i++){
+        
+        ofPoint p = *boxPositions.at(i);
+        ofSetColor(boxColors.at(i));
+        ofFill();
+        ofDrawBox(p,boxSizes.at(i) * (sin((float)i + ofGetElapsedTimef())*0.25f + 1.0f));
+    }
 
 }
 
-//--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
-}
 void ofApp::generateBoxes(){
     boxPositions.clear();
     boxSizes.clear();
@@ -180,4 +142,11 @@ void ofApp::generateBoxes(){
     
     
     
+}
+void ofApp::drawMouseUI(){
+    ofFill();
+    ofSetColor(255);
+    ofDrawEllipse(mouseDownPosition.x,mouseDownPosition.y,10,10);
+    ofDrawEllipse(ofGetMouseX(),ofGetMouseY(),5,5);
+    ofDrawLine(mouseDownPosition.x,mouseDownPosition.y,ofGetMouseX(),ofGetMouseY());
 }
